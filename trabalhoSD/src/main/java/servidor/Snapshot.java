@@ -57,6 +57,13 @@ public class Snapshot implements Runnable {
 				fileStream.close();
 				
 				if(this.finger.getLogNumber() >= 3) {
+				  
+				  File f = new File ("logs\\" + this.finger.getId());
+				  if(f.length() > 7) {
+				    File[] files = f.listFiles();
+				    files[0].delete();
+				  }
+				  
 					File snapDeletar = new File("logs\\" + this.finger.getId() + "\\" + (this.finger.getLogNumber() - 4) + ".snap");
 					if (snapDeletar.exists()) {
 						snapDeletar.delete();
