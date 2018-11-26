@@ -13,6 +13,7 @@ public class BuildRing {
 			remover(diretorio);
 //			System.out.println("pow: " + Integer.toString((int) Math.pow(2, m)));
 			Constant.setMaxKey(Integer.toString((int) Math.pow(2, m)));
+			Constant.atualizaKeys();
 			BigInteger intervalo;
 			BigInteger offset = BigInteger.ZERO;
 //			System.out.println("reminder "+Constant.maxKey+" \\ "+n+": " + Constant.maxKey.mod(BigInteger.valueOf(n)));
@@ -68,6 +69,5 @@ public class BuildRing {
             }
         }
         f.delete();
-    
     }
 }

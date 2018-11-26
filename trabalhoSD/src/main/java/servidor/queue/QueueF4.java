@@ -11,17 +11,23 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import servidor.ClientData;
 import servidor.Finger;
+import servidor.FrameServer;
 import servidor.command.ExecuteCommand;
 import utils.Constant;
 
 public class QueueF4 extends Queue implements Runnable {
 
-	public QueueF4(QueueCommand queue, Finger finger) {
-		super(queue, finger);
+	public QueueF4(QueueCommand queue, Finger finger, FrameServer frame) {
+		super(queue, finger, frame);
 	}
-
+//	ManagedChannel channel;
 	ExecuteCommand execute = new ExecuteCommand();
-	ManagedChannel channel;
+	ManagedChannel channelAntecessor = ManagedChannelBuilder.forAddress(super.finger.getAddress(), finger.getAntecessor())
+      .usePlaintext(true).build();
+	ManagedChannel channelSucessor = ManagedChannelBuilder.forAddress(super.finger.getAddress(), finger.getSucessor())
+	    .usePlaintext(true).build();
+	GreeterGrpc.GreeterStub asyncStubAntecessor = GreeterGrpc.newStub(channelAntecessor);
+	GreeterGrpc.GreeterStub asyncStubSucessor = GreeterGrpc.newStub(channelSucessor);
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -31,10 +37,12 @@ public class QueueF4 extends Queue implements Runnable {
 
 			while (true) {
 				ClientData elemento = super.queue.consumeF4();
+				super.frame.append(">Consultando proximo server<");
 				StreamObserver<Reply> responseObserver = new StreamObserver<Reply>() {
 					@Override
 					public void onNext(Reply value) {
 						System.out.println(">>Resposta recebida");
+						frame.append(">Resposta recebida<");
 						elemento.sendReply(value.getMessage());
 					}
 
@@ -62,10 +70,18 @@ public class QueueF4 extends Queue implements Runnable {
 //							.usePlaintext(true).build();
 //				}
 
-				channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), checkWay(elemento))
-						.usePlaintext(true).build();
-
-				GreeterGrpc.GreeterStub asyncStub = GreeterGrpc.newStub(channel);
+//				channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), checkWay(elemento))
+//            .usePlaintext(true).build();
+				
+				GreeterGrpc.GreeterStub asyncStub;
+				if(checkWay(elemento) == finger.getAntecessor()) {
+				  asyncStub = asyncStubAntecessor;
+				}
+				else {
+				  asyncStub = asyncStubSucessor;
+				}
+				
+				
 				Request request = Request.newBuilder().setName(elemento.getComando()).build();
 				// asyncStub.send(request, responseObserver);
 

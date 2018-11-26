@@ -32,7 +32,7 @@ public class Snapshot implements Runnable {
 			
 			
 			try {
-				Thread.sleep(15000);
+				Thread.sleep(30000);
 				System.out.println("Gravando Snapshot do Servidor " + this.finger.getId());
 				
 				this.finger.incrementLog();
