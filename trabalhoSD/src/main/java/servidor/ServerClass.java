@@ -27,10 +27,13 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 	private Data dataBase;
 	private Finger finger;
 	private Snapshot snapshot;
+	public  FrameServer frame;
 	
 	public ServerClass(String andress, int port, BigInteger id, BigInteger minKey, BigInteger maxKey, int antecessor,
 			int sucessor) {
 		try {
+		  frame = new FrameServer(id);
+		  frame.start();
 			System.out.println("iniciando serverClass");
 			RecoveryData recovery = new RecoveryData();
 			dataBase = new Data();
@@ -61,12 +64,22 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			}
 
 			queueCommand = new QueueCommand();
-			queue = new Queue(queueCommand, dataBase, finger, mutex_f1, mutex); 
+			queue = new Queue(queueCommand, dataBase, finger, mutex_f1, mutex, frame); 
 			finger.print();
 			queue.run();
 			this.snapshot = new Snapshot(finger,dataBase);
 			Thread snap = new Thread(this.snapshot);
 			snap.start();
+			
+			frame.append("--------------------------------------");
+			frame.append(finger.getAddress());
+			frame.append("porta: "+Integer.toString(finger.getPort()));
+			frame.append("MaxKey: "+finger.getMaxKey());
+			frame.append("MinKey: "+finger.getMinKey());
+			frame.append("Antecessor: "+finger.getAntecessor());
+			frame.append("Sucessor: "+finger.getSucessor());
+			frame.append("--------------------------------------");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,6 +88,9 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 
 	public ServerClass(BigInteger id) {
 		try {
+		  frame = new FrameServer(id);
+      frame.start();
+      
 			RecoveryData recovery = new RecoveryData();
 			dataBase = new Data();
 			System.out.println("Recuperando dados finger");
@@ -103,17 +119,28 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			recovery.recovery(dataBase, finger);
 			if(lastSnap > -1)  finger.incrementLog();
 			queueCommand = new QueueCommand();
-			queue = new Queue(queueCommand, dataBase, finger,  mutex_f1, mutex);
+			queue = new Queue(queueCommand, dataBase, finger,  mutex_f1, mutex, frame);
 			queue.run();
 			finger.print();
 			this.snapshot = new Snapshot(finger,dataBase);
 			Thread snap = new Thread(this.snapshot);
 			snap.start();
+			
+			
+			  frame.append("--------------------------------------");
+	      frame.append(finger.getAddress());
+	      frame.append("porta: "+Integer.toString(finger.getPort()));
+	      frame.append("MinKey: "+finger.getMinKey());
+	      frame.append("MaxKey: "+finger.getMaxKey());
+	      frame.append("Antecessor: "+finger.getAntecessor());
+	      frame.append("Sucessor: "+finger.getSucessor());
+	      frame.append("--------------------------------------");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 
 	private Finger recuperaDadosFinger(BigInteger id) {
 		try {
@@ -133,61 +160,85 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 
 	@Override
 	public void send(Request req, StreamObserver<Reply> responseObserver) {
+	  if(req.getName() != null || !req.getName().equals(""))
+    {
+      frame.append("Recebido: "+ req.getName());
+    }
 		HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver, finger);
 		h.run();
 		try {
 			h.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		  System.out.println("ERRO");
 		}
 	}
 
 	@Override
 	public void create(Request req, StreamObserver<Reply> responseObserver) {
+	  if(req.getName() != null || !req.getName().equals(""))
+    {
+      frame.append("Recebido: "+ req.getName());
+    }
 		HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver, finger);
 		h.run();
 		try {
 			h.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		  System.out.println("ERRO");
 		}
 	}
 
 	@Override
 	public void delete(Request req, StreamObserver<Reply> responseObserver) {
+	  if(req.getName() != null || !req.getName().equals(""))
+    {
+      frame.append("Recebido: "+ req.getName());
+    }
 		HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver, finger);
 		h.run();
 		try {
 			h.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		  System.out.println("ERRO");
 		}
 	}
 
 	@Override
 	public void update(Request req, StreamObserver<Reply> responseObserver) {
+	  if(req.getName() != null || !req.getName().equals(""))
+    {
+      frame.append("Recebido: "+ req.getName());
+    }
 		HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver, finger);
 		h.run();
 		try {
 			h.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		  System.out.println("ERRO");
 		}
 	}
 
 	@Override
 	public void read(Request req, StreamObserver<Reply> responseObserver) {
+	  if(req.getName() != null || !req.getName().equals(""))
+	  {
+	    frame.append("Recebido: "+ req.getName());
+	  }
 		HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver, finger);
 		h.run();
 		try {
 			h.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			System.out.println("ERRO");
 		}
 	}
 
 	public Finger getFinger() {
 		return this.finger;
 	}
+	 
+  public FrameServer getframe() {
+    return this.frame;
+  }
 	
 }

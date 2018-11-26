@@ -22,10 +22,15 @@ public class QueueF4 extends Queue implements Runnable {
 	}
 //	ManagedChannel channel;
 	ExecuteCommand execute = new ExecuteCommand();
-	ManagedChannel channelAntecessor = ManagedChannelBuilder.forAddress(super.finger.getAddress(), finger.getAntecessor())
+	
+	@SuppressWarnings("deprecation")
+  ManagedChannel channelAntecessor = ManagedChannelBuilder.forAddress(super.finger.getAddress(), finger.getAntecessor())
       .usePlaintext(true).build();
-	ManagedChannel channelSucessor = ManagedChannelBuilder.forAddress(super.finger.getAddress(), finger.getSucessor())
+	
+	@SuppressWarnings("deprecation")
+  ManagedChannel channelSucessor = ManagedChannelBuilder.forAddress(super.finger.getAddress(), finger.getSucessor())
 	    .usePlaintext(true).build();
+	
 	GreeterGrpc.GreeterStub asyncStubAntecessor = GreeterGrpc.newStub(channelAntecessor);
 	GreeterGrpc.GreeterStub asyncStubSucessor = GreeterGrpc.newStub(channelSucessor);
 
@@ -58,18 +63,6 @@ public class QueueF4 extends Queue implements Runnable {
 					}
 				};
 
-//				if (elemento.getKey().compareTo(super.finger.getMaxKey()) > 0) {
-//					// passa direita
-//					System.out.println("Key esta a direita");
-//					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getSucessor())
-//							.usePlaintext(true).build();
-//				} else if (elemento.getKey().compareTo(super.finger.getMinKey()) < 0) {
-//					// passa esquerda
-//					System.out.println("Key esta a esquerda");
-//					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getAntecessor())
-//							.usePlaintext(true).build();
-//				}
-
 //				channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), checkWay(elemento))
 //            .usePlaintext(true).build();
 				
@@ -80,7 +73,6 @@ public class QueueF4 extends Queue implements Runnable {
 				else {
 				  asyncStub = asyncStubSucessor;
 				}
-				
 				
 				Request request = Request.newBuilder().setName(elemento.getComando()).build();
 				// asyncStub.send(request, responseObserver);
@@ -100,16 +92,13 @@ public class QueueF4 extends Queue implements Runnable {
 				else if (tipo.equals("delete")) {
 					asyncStub.delete(request, responseObserver);
 				}
-
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public int checkWay(ClientData elemento) {
-
 		/*
 		 //maior passa direita e menor para esquerda
 		BigInteger antecessor, sucessor, key;
@@ -120,7 +109,6 @@ public class QueueF4 extends Queue implements Runnable {
 		}
 		return finger.getAntecessor();
 		*/
-
 		BigInteger antecessor, sucessor, key;
 		key = elemento.getKey();
 		

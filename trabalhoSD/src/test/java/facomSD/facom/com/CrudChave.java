@@ -82,6 +82,8 @@ public class CrudChave {
 			c.greet("read -1");
 			resposta = getResposta(arquivo, 14);
 			assertTrue(resposta.equals("ERRO! Verifique a syntaxe do comando e a Key informada!"));
+			
+//			Thread.sleep(30000);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

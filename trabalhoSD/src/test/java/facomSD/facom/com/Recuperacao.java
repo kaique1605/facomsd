@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import facomSD.facom.com.threads.ThreadStartRing;
 import facomSD.facom.com.threads.ThreadStartServerExistente;
-import utils.Constant;
 
 public class Recuperacao {
 
@@ -60,6 +59,7 @@ public class Recuperacao {
 			resposta = getResposta(arquivo, i); i++;
 			assertTrue(resposta.equals("Dados criados com sucesso"));
 			t.stop();
+			c.shutdown();
 			while(t.isAlive()) {}
 			
 				System.out.println(" 	---------------------- Interrompida -------------------------");
@@ -87,8 +87,8 @@ public class Recuperacao {
 			t2.start();
 			t3.start();
 			String resposta2;
-			Thread.sleep(4000);
 			ClientTests c2 = new ClientTests();
+			Thread.sleep(4000);
 			c2.activate();
 			System.out.println("iniciando testes");
 			// READ EM CADA SERVER
@@ -104,6 +104,7 @@ public class Recuperacao {
 			c2.greet("read 15");
 			resposta2 = getResposta(arquivo, i); i++;//8 se nao comentar a primeira parte
 			assertTrue(resposta2.equals("teste15"));
+			//Thread.sleep(20000);
 //			*/		
 			
 

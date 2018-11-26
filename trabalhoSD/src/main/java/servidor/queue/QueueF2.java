@@ -7,10 +7,11 @@ import java.io.PrintStream;
 
 import servidor.ClientData;
 import servidor.Finger;
+import servidor.FrameServer;
 
 public class QueueF2 extends Queue implements Runnable {
-	public QueueF2(QueueCommand queue, Finger finger) {
-		super(queue, finger);
+	public QueueF2(QueueCommand queue, Finger finger, FrameServer frame) {
+		super(queue, finger, frame);
 	}
 
 	@Override

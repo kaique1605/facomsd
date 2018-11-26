@@ -54,6 +54,8 @@ public class CrudOkTest {
 			assertTrue(resposta.equals("Dados nao encontrados"));
 			offset=offset+6;
 			}
+			
+//			Thread.sleep(30000);
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

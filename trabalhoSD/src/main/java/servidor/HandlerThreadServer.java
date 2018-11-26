@@ -65,8 +65,9 @@ public class HandlerThreadServer extends Thread {
 	 * @return true caso esteja no intervalo e false caso contrario
 	 */
 	private boolean isViable(ClientData clientComand) {
-		if (clientComand.getKey().compareTo(Constant.maxKey) > 0
-				|| clientComand.getKey().compareTo(Constant.minKey) < 0) {
+		if (clientComand.getKey().compareTo(Constant.getMaxKey()) > 0
+				|| clientComand.getKey().compareTo(Constant.getMinKey()) < 0) {
+		  
 			return false;
 		}
 		return true;

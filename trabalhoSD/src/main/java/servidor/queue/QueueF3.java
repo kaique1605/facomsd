@@ -1,13 +1,14 @@
 package servidor.queue;
 
 import servidor.ClientData;
+import servidor.FrameServer;
 import servidor.command.ExecuteCommand;
 import servidor.dataBase.Data;
 
 public class QueueF3 extends Queue implements Runnable {
 
-	public QueueF3(QueueCommand queue, Data data) {
-		super(queue, data);
+	public QueueF3(QueueCommand queue, Data data, FrameServer frame) {
+		super(queue, data, frame);
 	}
 
 	ExecuteCommand execute = new ExecuteCommand();
@@ -24,6 +25,7 @@ public class QueueF3 extends Queue implements Runnable {
 				// out = elemento.getOut();
 				String resposta = execute.execute(elemento.getComando(), data);
 //				System.out.println("resposta F3: " + resposta);
+				super.frame.append("executando: "+elemento.getComando());
 				elemento.sendReply(resposta);
 				// elemento.getOut().writeObject(resposta);
 			}

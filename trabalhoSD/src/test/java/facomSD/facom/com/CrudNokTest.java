@@ -73,6 +73,8 @@ public class CrudNokTest {
 				offset = offset + 7;
 
 			}
+			
+//			Thread.sleep(30000);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
