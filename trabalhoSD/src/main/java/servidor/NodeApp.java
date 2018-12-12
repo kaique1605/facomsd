@@ -10,7 +10,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 @Component(immediate = true)
-public class Node {
+public class NodeApp {
   // private final int port = 5000;
   private static Server server;
   // private BindableService greeterService;

@@ -47,10 +47,9 @@ public class ExecuteCommand {
         return "Comando invalido";
     }
   }
-  
-//  public String execute(ClientData elemento) throws Exception {
-//    String comando = elemento.getComando();
-////    Data dataBase = elemento.getData();
-//    return execute(comando, dataBase);
-//  }
+  // public String execute(ClientData elemento) throws Exception {
+  // String comando = elemento.getComando();
+  //// Data dataBase = elemento.getData();
+  // return execute(comando, dataBase);
+  // }
 }
